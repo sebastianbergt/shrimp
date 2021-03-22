@@ -1,9 +1,9 @@
 # shrimp
 
-Shrimp is a helper class allowing for arena allocation.
+shrimp is a tiny library allowing for simple arena allocation.
 Currently it is not threadsafe!
 
-Usage is pretty simple:
+# Usage
 `
 #include <arena/arena.h>
 #include <array>
