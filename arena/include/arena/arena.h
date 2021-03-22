@@ -34,21 +34,23 @@ public:
     in_use_list_ = nullptr;
     initialized_ = true;
 
+    // initialize arena deleter
+    reusage_deleter_ = [this](T *t) {
+      auto arena_element = detail::ArenaElement<T>::move_front(
+          this->in_use_list_, this->free_list_);
+      arena_element->t = t;
+    };
+
     return true;
   }
 
-  unique_ptr<T> create() override {
+  arena_ptr<T> create() override {
     auto arena_element =
         detail::ArenaElement<T>::move_front(free_list_, in_use_list_);
-
     if (!arena_element) {
-      // unique_ptr<T> arena_ptr{{}, {[](T *t) {}}};
-      return nullptr;
+      return {nullptr, reusage_deleter_};
     }
-
-    unique_ptr<T> arena_ptr{arena_element->t, deleter_};
-
-    return std::move(arena_ptr);
+    return {arena_element->t, reusage_deleter_};
   }
 
 private:
@@ -71,12 +73,7 @@ private:
       list_elements_; // actual elements are stored here
   detail::ArenaElement<T> *free_list_;
   detail::ArenaElement<T> *in_use_list_;
-
-  std::function<void(T *)> deleter_{[this](T *t) {
-    auto arena_element = detail::ArenaElement<T>::move_front(this->in_use_list_,
-                                                             this->free_list_);
-    arena_element->t = t;
-  }};
+  std::function<void(T *t)> reusage_deleter_;
 };
 
 } // namespace arena

@@ -1,13 +1,11 @@
 #include <iostream>
 #define CATCH_CONFIG_MAIN
 #define CATCH_CONFIG_ENABLE_BENCHMARKING
-#include <arena/arena.h>
 #include <catch2/catch.hpp>
 
-class Complex {
-public:
-  Complex() = default;
+#include <arena/arena.h>
 
+struct Complex {
   std::array<std::uint8_t, 1500> buffer;
 };
 

@@ -11,17 +11,12 @@ SCENARIO("move_front", "[ArenaElement]") {
     std::vector<shrimp::arena::detail::ArenaElement<std::int32_t>> elements{};
 
     for (auto &i : integers) {
-      elements.emplace_back(
-          shrimp::arena::detail::ArenaElement<std::int32_t>{});
+      elements.emplace_back(shrimp::arena::detail::ArenaElement<std::int32_t>{
+          &integers[i], nullptr});
     }
 
-    elements[0].t = &integers[0];
     elements[0].next = &elements[1];
-
-    elements[1].t = &integers[1];
     elements[1].next = &elements[2];
-
-    elements[2].t = &integers[2];
     elements[2].next = nullptr;
 
     GIVEN("a filled source and empty target list") {

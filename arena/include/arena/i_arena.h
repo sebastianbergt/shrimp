@@ -9,7 +9,7 @@ namespace shrimp {
 namespace arena {
 
 template <typename T>
-using unique_ptr = std::unique_ptr<T, std::function<void(T *)>>;
+using arena_ptr = std::unique_ptr<T, std::function<void(T *)>>;
 
 template <typename T> class IArena {
 public:
@@ -21,7 +21,7 @@ public:
   IArena &operator=(IArena &&) = delete;
 
   virtual bool initialize(std::size_t size) = 0;
-  virtual unique_ptr<T> create() = 0;
+  virtual arena_ptr<T> create() = 0;
 };
 
 } // namespace arena
